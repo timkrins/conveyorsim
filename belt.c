@@ -49,7 +49,9 @@ count counts;
 item items[200];
 int items_made = 0;
 float swivel = 0;
+int dispense_random_angles = 1;
 double first_timer, second_timer, third_timer;
+char text_str[50];
 
 void add_item(int status,int type, int color, float width, float thick,  float x, float y, float z,int r_y, int r_x) {
 items[items_made].status = status;
@@ -74,18 +76,27 @@ items_made++;
 void init_items(void){
 //add_item(status,type,color,width,thick,x,y,z,rx,ry,order)
 //too annoying to create a variadic function.
-add_item(1,1,1,5,2,5,0,0,0,0); // red circle on dispenser
-add_item(1,2,2,5,2,11,0,0,90,0); // green triangle on dispenser
-add_item(1,3,3,5,2,17,0,0,0,0); // blue square on dispenser
+
+for(int r = 1; r < 4; r++){ // create each thing into the dispenser
+for(int s = 1; s < 4; s++){ // create each color
+add_item(1,r,s,5,2,0,0,0,0,0);
+add_item(1,r,s,3,2,0,0,0,0,0);
+}
+}
+/*
+add_item(1,1,1,5,2,0,0,0,0,0); // red circle on dispenser
+add_item(1,2,2,5,2,0,0,0,0,0); // green triangle on dispenser
+add_item(1,3,3,5,2,0,0,0,0,0); // blue square on dispenser
 add_item(1,2,3,5,2,0,0,0,0,0); // blue circle in dispenser
 add_item(1,3,2,5,2,0,0,0,0,0); // green square in dispenser
 add_item(1,3,1,5,2,0,0,0,0,0); // red square in dispenser
 add_item(1,1,2,5,2,0,0,0,0,0); // green circle in dispenser
 add_item(1,1,3,5,2,0,0,0,0,0); // blue circle in dispenser
+*/
 }
 
-float dispenser_y = 5.0f;
-float dispenser_x = 5.0f;
+float dispenser_y = 2.0f;
+float dispenser_x = 20.0f;
 float dispenser_z = 5.0f;
 float belt_y = 0.0f;
 float picker_y = 10.0f;
@@ -94,7 +105,7 @@ float table_radius = 5;
 float table_length = 50;
 float table_thick = 1;
 float conveyor_speed = -0.1;
-float floor_y = -20;
+float floor_y = -30;
 
 void fill_dispenser(void){ // grab stacked items on floor and fill dispenser
 for (int j = 0; j < items_made; j++){
@@ -103,7 +114,7 @@ if(items[j].status == 5){
 if(items[j].status == 5){ // was stacked on floor
 counts.fallen_height -= items[j].thick;
 counts.fallen--;
-printf("Stack Height Now:%f\n", counts.fallen_height);
+//printf("Stack Height Now:%f\n", counts.fallen_height);
 }
 items[j].status = 1;
 items[j].order = counts.dispenser;
@@ -137,6 +148,7 @@ void dispense(void){
 for (int j = 0; j < items_made; j++){
 if(items[j].status == 1){ // in dispensor only duh
 if(items[j].order == 0){
+items[j].r_y = 5*dispenser_z;
 items[j].status = 2; // place on conveyor
 counts.dispenser--; // decrease if it is dispensed.
 counts.dispenser_height -= items[j].thick;
@@ -145,7 +157,6 @@ items[j].order--;
 }
 }
 }
-
 }
 
 void process_items(void){
@@ -220,6 +231,7 @@ counts.fallen_height += items[i].thick;
 
 if(items[i].status == 5) {
 // ######### fallen to ground - aka. stacked ##########
+items[i].z = 0; //line em up'
 items[i].y = floor_y + items[i].order*items[i].thick;
 };
 
@@ -339,14 +351,23 @@ switch(items[j].color){
     case 3: glColor3f(0, 0, 1); break;
     default: break;
     }
-
 switch(items[j].type){
     case 1: draw_closed_cylinder(items[j].width/2.0, items[j].thick); break;
     case 2: draw_closed_triangle(items[j].width*0.866025404,items[j].width,items[j].thick); break;
     case 3: draw_closed_cuboid(items[j].width,items[j].width,items[j].thick); break;
     default: break;
     }
-    
+//tag items with lettering
+
+glColor3f(0.95, 0.95, 0.95);
+glRasterPos2f(7,1);
+strcat(text_str,"Item:");
+strcat(text_str, make_text(j));
+strcat(text_str,".");
+printString(text_str);
+memset(text_str, 0, sizeof(text_str));
+
+
 glPopMatrix();}
 }
 }
@@ -395,7 +416,7 @@ dispenser_z = 4*sin(swivel);
 second_timer = glfwGetTime();
 }
 
-if((glfwGetTime() - third_timer) > 15){
+if((glfwGetTime() - third_timer) > 10){
 fill_dispenser();
 third_timer = glfwGetTime();
 }

@@ -42,8 +42,9 @@ void draw_conveyor(void);
 // #################################################
 #include "constants.c"
 #include "shapes.c"
-#include "belt.c"
 #include "text.c"
+#include "belt.c"
+
  
 void quit(void){
 // #####################

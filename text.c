@@ -62,9 +62,9 @@ int xpos = (window_width/2) - (text_width/2);
 glRasterPos2f(xpos ,line_pos(pos));   printString(charlies);
 }
 
-char * make_text(float number_float){
+char * make_text(int number_int){
 memset(sprinter, 0, sizeof(sprinter));
-sprintf(sprinter, "%.1f", number_float);
+sprintf(sprinter, "%d", number_int);
 return sprinter;
 }
 
