@@ -1,4 +1,4 @@
-/*|_|_|_ __ _(c)|2| ___ __|_|_ __  ___ 
+/*|_|_|_ __ _(c)|2| ___ __|_|_ __  ___
 | _|| | '_ ` _ \|0|/ / '__|@|a'_ \/ __|
 | |_| | | | | | |1  <| |  |g|i| | \__ \
  \__|_|_| |_| | |2|\ \ |  |m|l| |_|__*/
@@ -45,7 +45,7 @@ void draw_conveyor(void);
 #include "text.c"
 #include "belt.c"
 
- 
+
 void quit(void){
 // #####################
 // Quits the application
@@ -134,7 +134,7 @@ if (theAction == GLFW_PRESS){
     case '9': holding9 = 1; break;
     case '0': holding0 = 1; break;
     case 257: quit(); break;
-    
+
     default: printf("%d key not used\n", theKey); break;
     }
   } else {
@@ -175,7 +175,7 @@ if (theAction == GLFW_PRESS){
     case '8': holding8 = 0; break;
     case '9': holding9 = 0; break;
     case '0': holding0 = 0; break;
-    
+
     default: break;
     };
   };
@@ -210,11 +210,11 @@ if((view_momentum_z > 0.01)||(view_momentum_z < -0.01)) {
 } else {
   view_momentum_z = 0.0;
 };
-    
+
 // ##########################
 // Don't get too close now...
 // ##########################
-    
+
 if(view_distance_from_model < 10){
   view_momentum_z = 0;
   view_distance_from_model = 10;
@@ -228,7 +228,7 @@ if(holdingS) { view_momentum_y += 0.1; };
 if(holdingW) { view_momentum_y -= 0.1; };
 if(holdingQ) { view_momentum_z +=0.1; };
 if(holdingE) { view_momentum_z -=0.1; };
-    
+
 // ##########################################################
 // This code here flips the up direction so the model doesn't
 // spaz out when you pass directly over it.
@@ -315,6 +315,7 @@ init_items();
 graphics_init();
 graphics_loop();
 quit();
+return 0;
 };
 
 

@@ -1,0 +1,35 @@
+# depslib dependency file v1.0
+1338398006 source:c:\users\pc\desktop\git\conveyorsim\conveyor.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<GL/glfw.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<GL/glext.h>
+	<math.h>
+	"constants.c"
+	"shapes.c"
+	"text.c"
+	"belt.c"
+
+1334534508 c:\glfw\include\gl\glfw.h
+	<OpenGL/gl3.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL3/gl3.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1338397743 c:\users\pc\desktop\git\conveyorsim\constants.c
+
+1338398710 c:\users\pc\desktop\git\conveyorsim\shapes.c
+
+1338397743 c:\users\pc\desktop\git\conveyorsim\text.c
+	"bitmap.c"
+
+1338397743 c:\users\pc\desktop\git\conveyorsim\bitmap.c
+
+1338398047 c:\users\pc\desktop\git\conveyorsim\belt.c
+	<limits.h>
+

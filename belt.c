@@ -1,4 +1,4 @@
-/*|_|_|_ __ _(c)|2| ___ __|_|_ __  ___ 
+/*|_|_|_ __ _(c)|2| ___ __|_|_ __  ___
 | _|| | '_ ` _ \|0|/ / '__|@|a'_ \/ __|
 | |_| | | | | | |1  <| |  |g|i| | \__ \
  \__|_|_| |_| | |2|\ \ |  |m|l| |_|__*/
@@ -12,11 +12,11 @@
 #include <limits.h>
 
 #define PI 3.14159265
-                        
+
 #define color_chunk(c) if(i == 0) { glColor3f(c, 0, 0); } \
                        if(i == 1) { glColor3f(0, c, 0); } \
                        if(i == 2) { glColor3f(0, 0, c); }
-                       
+
 
 typedef struct {
     int status;
@@ -76,9 +76,9 @@ items_made++;
 void init_items(void){
 //add_item(status,type,color,width,thick,x,y,z,rx,ry,order)
 //too annoying to create a variadic function.
-
-for(int r = 1; r < 4; r++){ // create each thing into the dispenser
-for(int s = 1; s < 4; s++){ // create each color
+int r, s;
+for(r = 1; r < 4; r++){ // create each thing into the dispenser
+for(s = 1; s < 4; s++){ // create each color
 add_item(1,r,s,5,2,0,0,0,0,0);
 add_item(1,r,s,3,2,0,0,0,0,0);
 }
@@ -108,7 +108,8 @@ float conveyor_speed = -0.1;
 float floor_y = -30;
 
 void fill_dispenser(void){ // grab stacked items on floor and fill dispenser
-for (int j = 0; j < items_made; j++){
+    int j;
+for (j = 0; j < items_made; j++){
 //if(items[j].status != 1){
 if(items[j].status == 5){
 if(items[j].status == 5){ // was stacked on floor
@@ -125,7 +126,8 @@ counts.dispenser_height += items[j].thick;
 }
 
 void fill_dispenser_single(void){ // grab stacked items on floor and fill dispenser
-for (int j = 0; j < items_made; j++){
+    int j;
+for (j = 0; j < items_made; j++){
 if(items[j].order == 0){
 if(items[j].status == 5){
 if(items[j].status == 5){ // was stacked on floor
@@ -145,7 +147,8 @@ items[j].order--;
 }
 
 void dispense(void){
-for (int j = 0; j < items_made; j++){
+    int j;
+for (j = 0; j < items_made; j++){
 if(items[j].status == 1){ // in dispensor only duh
 if(items[j].order == 0){
 items[j].r_y = 5*dispenser_z;
@@ -161,7 +164,7 @@ items[j].order--;
 
 void process_items(void){
 //Process all positions here.
-int possible_items = sizeof(items);
+//int possible_items = sizeof(items);
 //calculate the counts
 
 //counts.all = 0;
@@ -173,8 +176,8 @@ int possible_items = sizeof(items);
 //counts.falling = 0;
 //counts.fallen = 0;
 //counts.fallen_height = 0;
-
-for(int i = 0; i < items_made; i++){
+int i;
+for(i = 0; i < items_made; i++){
 
 
 if(items[i].status == 1) {
@@ -246,56 +249,55 @@ items[i].status = 4;
 } else {
 //rotating around the radius
 
+/*
+ a:  -(table_length/2) is the negative position of the crossover
+ b: items[i].x is going to be a negative position, greater than a.
+ the x movement will be 1.0* at (x = a), and the angle 0degrees
+ the x movement will be zero at (x = a-r), and the angle -90degrees.
+ the y movement will be 0.0* at (x = a)
+ the y movement will be 1.0* at (x = a-r)
 
-// a:  -(table_length/2) is the negative position of the crossover
-// b: items[i].x is going to be a negative position, greater than a.
-// the x movement will be 1.0* at (x = a), and the angle 0degrees
-// the x movement will be zero at (x = a-r), and the angle -90degrees.
-// the y movement will be 0.0* at (x = a)
-// the y movement will be 1.0* at (x = a-r)
-//
-//      x
-//      a
-//      __________________________________
-//    /    \
-//   |_r_   |       all in the x (x-a = 0)
-//    \    /
+      x
+      a
+      __________________________________
+    /    \
+   |_r_   |       all in the x (x-a = 0)
+    \    /
+   x
+      a
+      __________________________________
+    /    \
+   |_r_   |       all in the y (x-a = r)
+    \    /
 
-//   x
-//      a
-//      __________________________________
-//    /    \
-//   |_r_   |       all in the y (x-a = r)
-//    \    /
+ So I will want to use ((x-a)/r). zero when up top, one when at bottom.
 
-// So I will want to use ((x-a)/r). zero when up top, one when at bottom.
+ use atan2.
+ use the cosine for x and sine for y
 
-// use atan2.
-// use the cosine for x and sine for y
+ cos(0degrees) = 1
+ find the zero angle though.
+ tan(angle) = o / a
+ atan((x-a)/r)
+ atan(0) = 0
 
-// cos(0degrees) = 1
-// find the zero angle though.
-// tan(angle) = o / a
-// atan((x-a)/r)
-// atan(0) = 0
+ cos(-90degrees) = 0
+ tan(angle) = o / a
+ tan(-90degrees) = undefined
+ atan((x-a)/r)
+ atan(-1) = -1
 
-// cos(-90degrees) = 0
-// tan(angle) = o / a
-// tan(-90degrees) = undefined
-// atan((x-a)/r)
-// atan(-1) = -1
+ atan2(opposite, adjacent) = angle_to_use
 
-//atan2(opposite, adjacent) = angle_to_use
-
-//      ____
-//     |\
-//    e| \c
-//     |  \
-//     |   \
-//       d
-//
+      ____
+     |\
+    e| \c
+     |  \
+     |   \
+       d
 
 
+*/
 items[i].x += conveyor_speed*cos(atan2((items[i].x-(-(table_length/2))),items[i].y+table_radius));
 items[i].y -= conveyor_speed*sin(atan2((items[i].x-(-(table_length/2))),items[i].y+table_radius));
 items[i].r_x = atan2((items[i].x-(-(table_length/2))),items[i].y+table_radius)/(PI/180);
@@ -328,7 +330,8 @@ conveyor_speed = 0.0;
 }
 
 void list_items(void){
-for (int j = 0; j < items_made; j++){
+    int j;
+for (j = 0; j < items_made; j++){
 printf("Item:%d | Type:%d | Status:%d | Order: %d | Position: X%.2f,Y%.2f,Z%.2f\n", j,items[j].type,items[j].status,items[j].order,items[j].x,items[j].y,items[j].z);
 }
 printf("_______________________\n");
@@ -336,7 +339,8 @@ printf("_______________________\n");
 }
 
 void draw_items(void){
-for (int j = 0; j < items_made; j++){
+    int j;
+for (j = 0; j < items_made; j++){
 glPushMatrix();{
 glColor3f(0, 0, 1);
 glTranslated(items[j].z, items[j].y, items[j].x);

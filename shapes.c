@@ -1,9 +1,15 @@
-/*|_|_|_ __ _(c)|2| ___ __|_|_ __  ___ 
+/*|_|_|_ __ _(c)|2| ___ __|_|_ __  ___
 | _|| | '_ ` _ \|0|/ / '__|@|a'_ \/ __|
 | |_| | | | | | |1  <| |  |g|i| | \__ \
  \__|_|_| |_| | |2|\ \ |  |m|l| |_|__*/
 
 // prototype generic drawing routines. these start at (0,0,0) centered and in the -Y.
+
+#define changecols8 glColor3f(colors[0]*0.85f, colors[1]*0.85f, colors[2]*0.85f)
+#define changecols7 glColor3f(colors[0]*0.75f, colors[1]*0.75f, colors[2]*0.75f)
+#define changecols6 glColor3f(colors[0]*0.65f, colors[1]*0.65f, colors[2]*0.65f)
+#define changecols5 glColor3f(colors[0]*0.55f, colors[1]*0.55f, colors[2]*0.55f)
+#define changecols4 glColor3f(colors[0]*0.45f, colors[1]*0.45f, colors[2]*0.45f)
 
 void draw_sphere(float radius);
 void draw_cuboid(float width, float height, float thick);
@@ -19,7 +25,7 @@ void color_darken(void){
 // Darkens the current drawing colour.
 // ###################################
 glGetFloatv(GL_CURRENT_COLOR, colors);
-glColor3f(colors[0]*0.95f, colors[1]*0.95f, colors[2]*0.95f);
+changecols8;
 };
 
 void draw_closed_cylinder(float radius, float thick){
@@ -28,11 +34,13 @@ void draw_closed_cylinder(float radius, float thick){
 // ###################################
 glPushMatrix();
 glRotatef(90,1,0,0);
-gluCylinder(quadCylinder, radius, radius, thick, 32, 16);
-color_darken();
+
+
 glRotatef(180,0,1,0);
 gluDisk(quadDisk, 0, radius, 32, 1);
 glRotatef(-180,0,1,0);
+color_darken();
+gluCylinder(quadCylinder, radius, radius, thick, 32, 16);
 glTranslatef(0,0,thick);
 color_darken();
 gluDisk(quadDisk, 0, radius, 32, 1);
@@ -108,7 +116,7 @@ glGetFloatv(GL_CURRENT_COLOR, colors);
    glVertex3f((width/2),0-thick,-(height/2)); //V7
    glVertex3f(-(width/2),0-thick,-(height/2)); //V8
    */
-   
+
    //top
    glVertex3f(-(width/2),0, (height/2)); //V1
    glVertex3f(-(width/2),0,-(height/2)); //V4
@@ -116,11 +124,11 @@ glGetFloatv(GL_CURRENT_COLOR, colors);
    glVertex3f(-(width/2),0,-(height/2)); //V4
    glVertex3f( (width/2),0,-(height/2)); //V3
    glVertex3f( (width/2),0, (height/2)); //V2
-   
+
    //color_darken();
-   
-   glColor3f(colors[0]*0.95f, colors[1]*0.95f, colors[2]*0.95f);
-   
+
+   changecols8;
+
    //side1
    glVertex3f(-(width/2),0,(height/2)); //V1
    glVertex3f( (width/2),0,(height/2)); //V2
@@ -128,9 +136,9 @@ glGetFloatv(GL_CURRENT_COLOR, colors);
    glVertex3f( (width/2),0-thick,(height/2)); //V6
    glVertex3f(-(width/2),0-thick,(height/2)); //V5
    glVertex3f( (width/2),0,(height/2)); //V2
-   
-   glColor3f(colors[0]*0.85f, colors[1]*0.85f, colors[2]*0.85f);
-   
+
+   changecols7;
+
    //side2
    glVertex3f( (width/2),0,(height/2)); //V2
    glVertex3f( (width/2),0,-(height/2)); //V3
@@ -139,7 +147,7 @@ glGetFloatv(GL_CURRENT_COLOR, colors);
    glVertex3f( (width/2),0-thick,-(height/2)); //V7
    glVertex3f( (width/2),0-thick,(height/2)); //V6
 
-   glColor3f(colors[0]*0.75f, colors[1]*0.75f, colors[2]*0.75f);
+   changecols6;
 
    //side3
 
@@ -150,7 +158,7 @@ glGetFloatv(GL_CURRENT_COLOR, colors);
    glVertex3f(-(width/2),0,-(height/2)); //V4
    glVertex3f(-(width/2),0-thick,-(height/2)); //V8
 
-   glColor3f(colors[0]*0.65f, colors[1]*0.65f, colors[2]*0.65f);
+   changecols5;
 
    //side4
    glVertex3f(-(width/2),0,-(height/2)); //V4
@@ -159,9 +167,9 @@ glGetFloatv(GL_CURRENT_COLOR, colors);
    glVertex3f(-(width/2),0,-(height/2)); //V4
    glVertex3f(-(width/2),0,(height/2)); //V1
    glVertex3f(-(width/2),0-thick,(height/2)); //V5
-   
-   glColor3f(colors[0]*0.55f, colors[1]*0.55f, colors[2]*0.55f);
-   
+
+   changecols4;
+
    //bottom
    glVertex3f( (width/2),0-thick,-(height/2)); //V7
    glVertex3f(-(width/2),0-thick,-(height/2)); //V8
@@ -169,7 +177,7 @@ glGetFloatv(GL_CURRENT_COLOR, colors);
    glVertex3f(-(width/2),0-thick,-(height/2)); //V8
    glVertex3f(-(width/2),0-thick, (height/2)); //V5
    glVertex3f( (width/2),0-thick, (height/2)); //V6
-   
+
   glEnd();
   glPopMatrix();
 }
@@ -191,14 +199,14 @@ glGetFloatv(GL_CURRENT_COLOR, colors);
    glVertex3f((width/2),0-thick,(height/3)); //V5
    glVertex3f(0,0-thick,-((2*height)/3)); //V6
    */
-   
+
    //top
    glVertex3f(-(width/2),0,(height/2)); //V1
    glVertex3f(0,0,-((height)/2)); //V3
    glVertex3f((width/2),0,(height/2)); //V2
 
-   glColor3f(colors[0]*0.95f, colors[1]*0.95f, colors[2]*0.95f);
-   
+   changecols8;
+
    //side1
    glVertex3f(-(width/2),0,(height/2)); //V1
    glVertex3f((width/2),0,(height/2)); //V2
@@ -207,7 +215,7 @@ glGetFloatv(GL_CURRENT_COLOR, colors);
    glVertex3f((width/2),0,(height/2)); //V2
    glVertex3f((width/2),0-thick,(height/2)); //V5
 
-   glColor3f(colors[0]*0.85f, colors[1]*0.85f, colors[2]*0.85f);
+   changecols7;
 
 
    //side2
@@ -218,7 +226,7 @@ glGetFloatv(GL_CURRENT_COLOR, colors);
    glVertex3f((width/2),0-thick,(height/2)); //V5
    glVertex3f((width/2),0,(height/2)); //V2
 
-   glColor3f(colors[0]*0.75f, colors[1]*0.75f, colors[2]*0.75f);
+   changecols6;
 
    //side3
    glVertex3f(0,0,-((height)/2)); //V3
@@ -227,14 +235,14 @@ glGetFloatv(GL_CURRENT_COLOR, colors);
    glVertex3f(-(width/2),0-thick,(height/2)); //V4
    glVertex3f(0,0-thick,-((height)/2)); //V6
    glVertex3f(0,0,-((height)/2)); //V3
-   
-   glColor3f(colors[0]*0.65f, colors[1]*0.65f, colors[2]*0.65f);
-   
+
+   changecols5;
+
    //bottom
    glVertex3f(0,0-thick,-((height)/2)); //V6
    glVertex3f(-(width/2),0-thick,(height/2)); //V4
    glVertex3f((width/2),0-thick,(height/2)); //V5
-   
+
   glEnd();
   glPopMatrix();
 }
