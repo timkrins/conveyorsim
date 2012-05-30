@@ -41,6 +41,10 @@
 			<Add library="gdi32" />
 			<Add directory="C:\GLFW\lib" />
 		</Linker>
+		<ExtraCommands>
+			<Add after="update.bat $(PROJECT_NAME)" />
+			<Mode after="always" />
+		</ExtraCommands>
 		<Unit filename="belt.c">
 			<Option compilerVar="CC" />
 			<Option compile="0" />
@@ -58,6 +62,9 @@
 		</Unit>
 		<Unit filename="conveyor.c">
 			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="conveyorsim.rc">
+			<Option compilerVar="WINDRES" />
 		</Unit>
 		<Unit filename="shapes.c">
 			<Option compilerVar="CC" />

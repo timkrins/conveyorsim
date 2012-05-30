@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="belt.c" open="1" top="1" tabpos="3">
+	<File name="belt.c" open="0" top="0" tabpos="3">
 		<Cursor position="10442" topLine="372" />
 	</File>
-	<File name="conveyor.c" open="1" top="0" tabpos="2">
-		<Cursor position="8773" topLine="0" />
+	<File name="conveyor.c" open="0" top="0" tabpos="2">
+		<Cursor position="1885" topLine="57" />
 	</File>
-	<File name="shapes.c" open="1" top="0" tabpos="1">
+	<File name="conveyorsim.rc" open="0" top="0" tabpos="0">
+		<Cursor position="0" topLine="5" />
+	</File>
+	<File name="shapes.c" open="0" top="0" tabpos="1">
 		<Cursor position="7771" topLine="43" />
 	</File>
 </CodeBlocks_layout_file>
