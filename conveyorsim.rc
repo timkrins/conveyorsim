@@ -1,0 +1,26 @@
+id ICON "favicon.ico"
+GLFW_ICON ICON "favicon.ico"
+1 VERSIONINFO
+FILEVERSION     1,0,0,0
+PRODUCTVERSION  1,0,0,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "080904E4"
+    BEGIN
+      VALUE "CompanyName", "tk.automation"
+      VALUE "FileDescription", "conveyorsim"
+      VALUE "FileVersion", "0.01"
+      VALUE "InternalName", "conveyorsim"
+      VALUE "LegalCopyright", "Tim Krins"
+      VALUE "OriginalFilename", "conveyorsim.exe"
+      VALUE "ProductName", "Conveyor Sim"
+      VALUE "ProductVersion", "0.01"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x809, 1252
+  END
+END

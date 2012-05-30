@@ -18,7 +18,8 @@
                        if(i == 2) { glColor3f(0, 0, c); }
 
 
-typedef struct {
+typedef struct
+{
     int status;
     int type;
     float x;
@@ -32,7 +33,8 @@ typedef struct {
     int order;
 } item;
 
-typedef struct {
+typedef struct
+{
     int all;
     int dispenser;
     float dispenser_height;
@@ -53,46 +55,64 @@ int dispense_random_angles = 1;
 double first_timer, second_timer, third_timer;
 char text_str[50];
 
-void add_item(int status,int type, int color, float width, float thick,  float x, float y, float z,int r_y, int r_x) {
-items[items_made].status = status;
-int order = 0;
-if(status == 1) { order = counts.dispenser++; counts.dispenser_height += thick;}
-if(status == 2) { order = counts.conveyor++; }
-if(status == 3) { counts.picked++; }
-if(status == 5) { order = counts.fallen++; counts.fallen_height += thick;}
-items[items_made].type = type;
-items[items_made].color = color;
-items[items_made].width = width;
-items[items_made].thick = thick;
-items[items_made].x = x;
-items[items_made].y = y;
-items[items_made].z = z;
-items[items_made].r_y = r_y;
-items[items_made].r_x = r_x;
-items[items_made].order = order;
-items_made++;
+void add_item(int status,int type, int color, float width, float thick,  float x, float y, float z,int r_y, int r_x)
+{
+    items[items_made].status = status;
+    int order = 0;
+    if(status == 1)
+    {
+        order = counts.dispenser++;
+        counts.dispenser_height += thick;
+    }
+    if(status == 2)
+    {
+        order = counts.conveyor++;
+    }
+    if(status == 3)
+    {
+        counts.picked++;
+    }
+    if(status == 5)
+    {
+        order = counts.fallen++;
+        counts.fallen_height += thick;
+    }
+    items[items_made].type = type;
+    items[items_made].color = color;
+    items[items_made].width = width;
+    items[items_made].thick = thick;
+    items[items_made].x = x;
+    items[items_made].y = y;
+    items[items_made].z = z;
+    items[items_made].r_y = r_y;
+    items[items_made].r_x = r_x;
+    items[items_made].order = order;
+    items_made++;
 };
 
-void init_items(void){
+void init_items(void)
+{
 //add_item(status,type,color,width,thick,x,y,z,rx,ry,order)
 //too annoying to create a variadic function.
-int r, s;
-for(r = 1; r < 4; r++){ // create each thing into the dispenser
-for(s = 1; s < 4; s++){ // create each color
-add_item(1,r,s,5,2,0,0,0,0,0);
-add_item(1,r,s,3,2,0,0,0,0,0);
-}
-}
-/*
-add_item(1,1,1,5,2,0,0,0,0,0); // red circle on dispenser
-add_item(1,2,2,5,2,0,0,0,0,0); // green triangle on dispenser
-add_item(1,3,3,5,2,0,0,0,0,0); // blue square on dispenser
-add_item(1,2,3,5,2,0,0,0,0,0); // blue circle in dispenser
-add_item(1,3,2,5,2,0,0,0,0,0); // green square in dispenser
-add_item(1,3,1,5,2,0,0,0,0,0); // red square in dispenser
-add_item(1,1,2,5,2,0,0,0,0,0); // green circle in dispenser
-add_item(1,1,3,5,2,0,0,0,0,0); // blue circle in dispenser
-*/
+    int r, s;
+    for(r = 1; r < 4; r++)  // create each thing into the dispenser
+    {
+        for(s = 1; s < 4; s++)  // create each color
+        {
+            add_item(1,r,s,5,2,0,0,0,0,0);
+            add_item(1,r,s,3,2,0,0,0,0,0);
+        }
+    }
+    /*
+    add_item(1,1,1,5,2,0,0,0,0,0); // red circle on dispenser
+    add_item(1,2,2,5,2,0,0,0,0,0); // green triangle on dispenser
+    add_item(1,3,3,5,2,0,0,0,0,0); // blue square on dispenser
+    add_item(1,2,3,5,2,0,0,0,0,0); // blue circle in dispenser
+    add_item(1,3,2,5,2,0,0,0,0,0); // green square in dispenser
+    add_item(1,3,1,5,2,0,0,0,0,0); // red square in dispenser
+    add_item(1,1,2,5,2,0,0,0,0,0); // green circle in dispenser
+    add_item(1,1,3,5,2,0,0,0,0,0); // blue circle in dispenser
+    */
 }
 
 float dispenser_y = 2.0f;
@@ -104,65 +124,83 @@ float table_width = 10;
 float table_radius = 5;
 float table_length = 50;
 float table_thick = 1;
-float conveyor_speed = -0.1;
+float conveyor_speed = -0.2;
 float floor_y = -30;
 
-void fill_dispenser(void){ // grab stacked items on floor and fill dispenser
+void fill_dispenser(void)  // grab stacked items on floor and fill dispenser
+{
     int j;
-for (j = 0; j < items_made; j++){
+    for (j = 0; j < items_made; j++)
+    {
 //if(items[j].status != 1){
-if(items[j].status == 5){
-if(items[j].status == 5){ // was stacked on floor
-counts.fallen_height -= items[j].thick;
-counts.fallen--;
+        if(items[j].status == 5)
+        {
+            if(items[j].status == 5)  // was stacked on floor
+            {
+                counts.fallen_height -= items[j].thick;
+                counts.fallen--;
 //printf("Stack Height Now:%f\n", counts.fallen_height);
-}
-items[j].status = 1;
-items[j].order = counts.dispenser;
-counts.dispenser++;
-counts.dispenser_height += items[j].thick;
-}
-}
+            }
+            items[j].status = 1;
+            items[j].order = counts.dispenser;
+            counts.dispenser++;
+            counts.dispenser_height += items[j].thick;
+        }
+    }
 }
 
-void fill_dispenser_single(void){ // grab stacked items on floor and fill dispenser
+void fill_dispenser_single(void)  // grab stacked items on floor and fill dispenser
+{
     int j;
-for (j = 0; j < items_made; j++){
-if(items[j].order == 0){
-if(items[j].status == 5){
-if(items[j].status == 5){ // was stacked on floor
-counts.fallen_height -= items[j].thick;
-counts.fallen--;
+    for (j = 0; j < items_made; j++)
+    {
+        if(items[j].order == 0)
+        {
+            if(items[j].status == 5)
+            {
+                if(items[j].status == 5)  // was stacked on floor
+                {
+                    counts.fallen_height -= items[j].thick;
+                    counts.fallen--;
 //printf("Stack Height Now:%f\n", counts.fallen_height);
-}
-items[j].status = 1;
-items[j].order = counts.dispenser;
-counts.dispenser++;
-counts.dispenser_height += items[j].thick;
-}
-} else {
-items[j].order--;
-}
-}
+                }
+                items[j].status = 1;
+                items[j].order = counts.dispenser;
+                counts.dispenser++;
+                counts.dispenser_height += items[j].thick;
+            }
+        }
+        else
+        {
+            items[j].order--;
+        }
+    }
 }
 
-void dispense(void){
+void dispense(void)
+{
     int j;
-for (j = 0; j < items_made; j++){
-if(items[j].status == 1){ // in dispensor only duh
-if(items[j].order == 0){
-items[j].r_y = 5*dispenser_z;
-items[j].status = 2; // place on conveyor
-counts.dispenser--; // decrease if it is dispensed.
-counts.dispenser_height -= items[j].thick;
-} else {
-items[j].order--;
-}
-}
-}
+    for (j = 0; j < items_made; j++)
+    {
+        if(items[j].status == 1)  // in dispensor only duh
+        {
+            if(items[j].order == 0)
+            {
+                items[j].r_y = 5*dispenser_z;
+                items[j].status = 2; // place on conveyor
+                counts.dispenser--; // decrease if it is dispensed.
+                counts.dispenser_height -= items[j].thick;
+            }
+            else
+            {
+                items[j].order--;
+            }
+        }
+    }
 }
 
-void process_items(void){
+void process_items(void)
+{
 //Process all positions here.
 //int possible_items = sizeof(items);
 //calculate the counts
@@ -176,138 +214,154 @@ void process_items(void){
 //counts.falling = 0;
 //counts.fallen = 0;
 //counts.fallen_height = 0;
-int i;
-for(i = 0; i < items_made; i++){
+    int i;
+    for(i = 0; i < items_made; i++)
+    {
 
 
-if(items[i].status == 1) {
+        if(items[i].status == 1)
+        {
 // ##### in the dispenser #######
 
-items[i].r_x = 0;
-items[i].r_y = 0;
-items[i].x = dispenser_x;
-items[i].z = dispenser_z;
-items[i].y = dispenser_y + (items[i].order*items[i].thick);
+            items[i].r_x = 0;
+            items[i].r_y = 0;
+            items[i].x = dispenser_x;
+            items[i].z = dispenser_z;
+            items[i].y = dispenser_y + (items[i].order*items[i].thick);
 //printf("ahaha y%f-%f-%f\n", items[i].y, items[i].x, items[i].z);
-};
+        };
 
 
-if(items[i].status == 2) {
+        if(items[i].status == 2)
+        {
 // ####### on the conveyor ##########
-if(items[i].x < -(table_length/2)){
+            if(items[i].x < -(table_length/2))
+            {
 //rolled off the flat
-items[i].status = 6;
-counts.end_conveyor++;
-items[i].order = counts.end_conveyor;
-} else {
+                items[i].status = 6;
+                counts.end_conveyor++;
+                items[i].order = counts.end_conveyor;
+            }
+            else
+            {
 //still on conveyor
-counts.conveyor++;
-items[i].x += conveyor_speed;
-items[i].y = belt_y;
-};
-};
+                counts.conveyor++;
+                items[i].x += conveyor_speed;
+                items[i].y = belt_y;
+            };
+        };
 
 
-if(items[i].status == 3) {
+        if(items[i].status == 3)
+        {
 // ###### picked by picker ###########
 //counts.picked++;
-items[i].y = belt_y + picker_y;
-};
+            items[i].y = belt_y + picker_y;
+        };
 
 
-if(items[i].status == 4) {
+        if(items[i].status == 4)
+        {
 // ######### falling through the air #########
-if(items[i].y > (floor_y+(counts.fallen_height)+items[i].thick)) {
+            if(items[i].y > (floor_y+(counts.fallen_height)+items[i].thick))
+            {
 //counts.falling++;
 // fall
-items[i].y -= 0.5f;
-} else {
+                items[i].y -= 0.5f;
+            }
+            else
+            {
 //fallen
-items[i].order = counts.fallen;
-items[i].r_x = 0;
-items[i].status = 5;
-counts.fallen++;
-counts.fallen_height += items[i].thick;
-};
-};
+                items[i].order = counts.fallen;
+                items[i].r_x = 0;
+                items[i].status = 5;
+                counts.fallen++;
+                counts.fallen_height += items[i].thick;
+            };
+        };
 
 
-if(items[i].status == 5) {
+        if(items[i].status == 5)
+        {
 // ######### fallen to ground - aka. stacked ##########
-items[i].z = 0; //line em up'
-items[i].y = floor_y + items[i].order*items[i].thick;
-};
+            items[i].z = 0; //line em up'
+            items[i].y = floor_y + items[i].order*items[i].thick;
+        };
 
 
-if(items[i].status == 6) {
+        if(items[i].status == 6)
+        {
 // ######## rolling off conveyor ###########
-if((items[i].x <= -((table_length/2)+table_radius))||(items[i].y <= 0-table_radius)) {
+            if((items[i].x <= -((table_length/2)+table_radius))||(items[i].y <= 0-table_radius))
+            {
 //rolled off the edge, now is falling
-counts.falling++;
-items[i].order = counts.falling;
-items[i].status = 4;
-} else {
+                counts.falling++;
+                items[i].order = counts.falling;
+                items[i].status = 4;
+            }
+            else
+            {
 //rotating around the radius
 
-/*
- a:  -(table_length/2) is the negative position of the crossover
- b: items[i].x is going to be a negative position, greater than a.
- the x movement will be 1.0* at (x = a), and the angle 0degrees
- the x movement will be zero at (x = a-r), and the angle -90degrees.
- the y movement will be 0.0* at (x = a)
- the y movement will be 1.0* at (x = a-r)
+                /*
+                 a:  -(table_length/2) is the negative position of the crossover
+                 b: items[i].x is going to be a negative position, greater than a.
+                 the x movement will be 1.0* at (x = a), and the angle 0degrees
+                 the x movement will be zero at (x = a-r), and the angle -90degrees.
+                 the y movement will be 0.0* at (x = a)
+                 the y movement will be 1.0* at (x = a-r)
 
-      x
-      a
-      __________________________________
-    /    \
-   |_r_   |       all in the x (x-a = 0)
-    \    /
-   x
-      a
-      __________________________________
-    /    \
-   |_r_   |       all in the y (x-a = r)
-    \    /
+                      x
+                      a
+                      __________________________________
+                    /    \
+                   |_r_   |       all in the x (x-a = 0)
+                    \    /
+                   x
+                      a
+                      __________________________________
+                    /    \
+                   |_r_   |       all in the y (x-a = r)
+                    \    /
 
- So I will want to use ((x-a)/r). zero when up top, one when at bottom.
+                 So I will want to use ((x-a)/r). zero when up top, one when at bottom.
 
- use atan2.
- use the cosine for x and sine for y
+                 use atan2.
+                 use the cosine for x and sine for y
 
- cos(0degrees) = 1
- find the zero angle though.
- tan(angle) = o / a
- atan((x-a)/r)
- atan(0) = 0
+                 cos(0degrees) = 1
+                 find the zero angle though.
+                 tan(angle) = o / a
+                 atan((x-a)/r)
+                 atan(0) = 0
 
- cos(-90degrees) = 0
- tan(angle) = o / a
- tan(-90degrees) = undefined
- atan((x-a)/r)
- atan(-1) = -1
+                 cos(-90degrees) = 0
+                 tan(angle) = o / a
+                 tan(-90degrees) = undefined
+                 atan((x-a)/r)
+                 atan(-1) = -1
 
- atan2(opposite, adjacent) = angle_to_use
+                 atan2(opposite, adjacent) = angle_to_use
 
-      ____
-     |\
-    e| \c
-     |  \
-     |   \
-       d
-
-
-*/
-items[i].x += conveyor_speed*cos(atan2((items[i].x-(-(table_length/2))),items[i].y+table_radius));
-items[i].y -= conveyor_speed*sin(atan2((items[i].x-(-(table_length/2))),items[i].y+table_radius));
-items[i].r_x = atan2((items[i].x-(-(table_length/2))),items[i].y+table_radius)/(PI/180);
-}
-counts.all = counts.dispenser+counts.conveyor+counts.picked+counts.falling+counts.fallen;
-};
+                      ____
+                     |\
+                    e| \c
+                     |  \
+                     |   \
+                       d
 
 
+                */
+                items[i].x += conveyor_speed*cos(atan2((items[i].x-(-(table_length/2))),items[i].y+table_radius));
+                items[i].y -= conveyor_speed*sin(atan2((items[i].x-(-(table_length/2))),items[i].y+table_radius));
+                items[i].r_x = atan2((items[i].x-(-(table_length/2))),items[i].y+table_radius)/(PI/180);
+            }
+            counts.all = counts.dispenser+counts.conveyor+counts.picked+counts.falling+counts.fallen;
+        };
 
-}
+
+
+    }
 }
 
 void calculate(void);
@@ -317,71 +371,97 @@ void conveyor_sections(void);
 
 //void drop_item(void);
 
-void conveyor_left(void){
-conveyor_speed = -0.1;
+void conveyor_left(void)
+{
+    conveyor_speed = -0.2;
 }
 
-void conveyor_right(void){
-conveyor_speed = 0.1;
+void conveyor_right(void)
+{
+    conveyor_speed = 0.2;
 }
 
-void conveyor_stop(void){
-conveyor_speed = 0.0;
+void conveyor_stop(void)
+{
+    conveyor_speed = 0.0;
 }
 
-void list_items(void){
+void list_items(void)
+{
     int j;
-for (j = 0; j < items_made; j++){
-printf("Item:%d | Type:%d | Status:%d | Order: %d | Position: X%.2f,Y%.2f,Z%.2f\n", j,items[j].type,items[j].status,items[j].order,items[j].x,items[j].y,items[j].z);
-}
-printf("_______________________\n");
+    for (j = 0; j < items_made; j++)
+    {
+        printf("Item:%d | Type:%d | Status:%d | Order: %d | Position: X%.2f,Y%.2f,Z%.2f\n", j,items[j].type,items[j].status,items[j].order,items[j].x,items[j].y,items[j].z);
+    }
+    printf("_______________________\n");
 
 }
 
-void draw_items(void){
+void draw_items(void)
+{
     int j;
-for (j = 0; j < items_made; j++){
-glPushMatrix();{
-glColor3f(0, 0, 1);
-glTranslated(items[j].z, items[j].y, items[j].x);
-glRotatef(items[j].r_x,1,0,0);
-glRotated(items[j].r_y,0,1,0);
+    for (j = 0; j < items_made; j++)
+    {
+        glPushMatrix();
+        {
+            glColor3f(0, 0, 1);
+            glTranslated(items[j].z, items[j].y, items[j].x);
+            glRotatef(items[j].r_x,1,0,0);
+            glRotated(items[j].r_y,0,1,0);
 //printf("item:%d, zrotation%f\n", j, items[j].r_x);
 
 
-switch(items[j].color){
-    case 1: glColor3f(1, 0, 0); break;
-    case 2: glColor3f(0, 1, 0); break;
-    case 3: glColor3f(0, 0, 1); break;
-    default: break;
-    }
-switch(items[j].type){
-    case 1: draw_closed_cylinder(items[j].width/2.0, items[j].thick); break;
-    case 2: draw_closed_triangle(items[j].width*0.866025404,items[j].width,items[j].thick); break;
-    case 3: draw_closed_cuboid(items[j].width,items[j].width,items[j].thick); break;
-    default: break;
-    }
+            switch(items[j].color)
+            {
+            case 1:
+                glColor3f(1, 0, 0);
+                break;
+            case 2:
+                glColor3f(0, 1, 0);
+                break;
+            case 3:
+                glColor3f(0, 0, 1);
+                break;
+            default:
+                break;
+            }
+            switch(items[j].type)
+            {
+            case 1:
+                draw_closed_cylinder(items[j].width/2.0, items[j].thick);
+                break;
+            case 2:
+                draw_closed_triangle(items[j].width*0.866025404,items[j].width,items[j].thick);
+                break;
+            case 3:
+                draw_closed_cuboid(items[j].width,items[j].width,items[j].thick);
+                break;
+            default:
+                break;
+            }
 //tag items with lettering
 
-glColor3f(0.95, 0.95, 0.95);
-glRasterPos2f(7,1);
-strcat(text_str,"Item:");
-strcat(text_str, make_text(j));
-strcat(text_str,".");
-printString(text_str);
-memset(text_str, 0, sizeof(text_str));
+            glColor3f(0.95, 0.95, 0.95);
+            glRasterPos2f(7,1);
+            strcat(text_str,"Item:");
+            strcat(text_str, make_text(j));
+            strcat(text_str,".");
+            printString(text_str);
+            memset(text_str, 0, sizeof(text_str));
 
 
-glPopMatrix();}
+            glPopMatrix();
+        }
+    }
 }
-}
 
-void draw_table(void){
-glPushMatrix();
-glColor3f(0.5, 0.5, 0.5);
-glTranslated(0, -(table_thick*2), 0);
-draw_closed_cuboid(table_width,table_length,table_thick);
-glPopMatrix();
+void draw_table(void)
+{
+    glPushMatrix();
+    glColor3f(0.5, 0.5, 0.5);
+    glTranslated(0, -(table_thick*2), 0);
+    draw_closed_cuboid(table_width,table_length,table_thick);
+    glPopMatrix();
 }
 
 
@@ -404,77 +484,90 @@ item_count = 0;
 }
 */
 
-void move_dispenser(void){
+void move_dispenser(void)
+{
 //nada
 }
 
-void every_second(void){
-if((glfwGetTime() - first_timer) > 1){
-dispense();
-first_timer = glfwGetTime();
+void every_second(void)
+{
+    if((glfwGetTime() - first_timer) > 1)
+    {
+        dispense();
+        first_timer = glfwGetTime();
+    }
+
+    if((glfwGetTime() - second_timer) > 0.02)
+    {
+        swivel += 0.06;
+        dispenser_z = 4*sin(swivel);
+        second_timer = glfwGetTime();
+            process_items();
+    }
+
+    if((glfwGetTime() - third_timer) > 10)
+    {
+        fill_dispenser();
+        third_timer = glfwGetTime();
+    }
 }
 
-if((glfwGetTime() - second_timer) > 0.02){
-swivel += 0.06;
-dispenser_z = 4*sin(swivel);
-second_timer = glfwGetTime();
-}
-
-if((glfwGetTime() - third_timer) > 10){
-fill_dispenser();
-third_timer = glfwGetTime();
-}
-}
-
-void draw_conveyor(void){
+void draw_conveyor(void)
+{
 // ######################
 // Called from other function.
 // Draws the conveyor.
 // ######################
-/*
-if(holdingC == 1) {
-drop_item();
-}
-*/
+    /*
+    if(holdingC == 1) {
+    drop_item();
+    }
+    */
 
-process_items();
+    if(holdingN == 1)
+    {
+        conveyor_left();
+    }
 
-if(holdingN == 1) {
-conveyor_left();
-}
+    if(holdingM == 1)
+    {
+        conveyor_right();
+    }
 
-if(holdingM == 1) {
-conveyor_right();
-}
+    if(holdingB == 1)
+    {
+        conveyor_stop();
+    }
 
-if(holdingB == 1) {
-conveyor_stop();
-}
-
-if(holdingR == 1){
-fill_dispenser();
-}
-
+    if(holdingR == 1)
+    {
+        fill_dispenser();
+    }
 
 
-if(holdingT == 1){
+
+    if(holdingT == 1)
+    {
 
 //double current_time = glfwGetTime();
 
-dispense();
+        dispense();
 
-}
+    }
 
-if(holdingP == 1) {
-list_items();
-}
+    if(holdingP == 1)
+    {
+        list_items();
+    }
 
-glPushMatrix();{
+    glPushMatrix();
+    {
 
-move_dispenser();
-draw_table();
-draw_items();
-every_second();
+        move_dispenser();
+        draw_table();
+        draw_items();
+        every_second();
 
-glPopMatrix();}
+        glPopMatrix();
+    }
 }
